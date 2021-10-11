@@ -1,0 +1,74 @@
+Qs. 1 (a)
+``#include <stdio.h>
+
+int main()
+{
+    int num;
+
+    do
+    {
+        printf("welcome,enter 1\n");
+        scanf("%d", &num);
+        if (num == 1)
+            printf("Hi nice to meet you\n");
+        else
+            printf("wrong input\n");
+    }while(num != 1);
+    
+}``
+``
+(b) link: https://www.tinkercad.com/things/gBIfUASxluA-mighty-kasi/editel
+A simple LED circuit connection
+
+// C++ code
+//Initialization
+void setup()
+{
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+}
+/*
+//blinking out of sync
+void loop()
+{
+  digitalWrite(13, HIGH);
+  digitalWrite(12, LOW);
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(13, LOW);
+  digitalWrite(12, HIGH);
+  delay(500); // Wait for 1000 millisecond(s)
+}
+*/
+//blinking in sync
+void loop()
+{
+  digitalWrite(13, HIGH);
+  digitalWrite(12, HIGH);
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(13, LOW);
+  digitalWrite(12, LOW);
+  delay(500); // Wait for 1000 millisecond(s)
+}``
+
+(c) Deadline is a time frame given for a task or an event to occur in a real time system. Failure to this results in consequences which could be absolute or relaxed.
+An absolute deadline  is where there are rigid constraints i.e. failure results in severe consequence. Whereas, a relaxed deadline does not have a severe consequence.
+We can ensure to be within deadline by:
+1. Setting priorities on the series of events that take place. The higher the priority, the better chance of the task executing on the micro-controller and meeting it's deadline.
+2. Preemption: This means pausing/preventing a lower priority task from performing so, a higher priority task can be executed. 
+3. Having a scheduler that enforces tasks are performed according to priority.(A timer)
+
+
+
+- Rate monotonic analysis:Used to find the maximum CPU load time to meet real time requirement. to ensure tasks are set according to priority.
+- Use of trace tools such as SWD(Serial Wire Debug)
+- Test continuously
+
+
+example of a processor - ARM core processor(32-bits, 550MHz, 1.024MB)
+
+
+
+
+
+
+
