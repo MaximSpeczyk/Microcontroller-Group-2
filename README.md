@@ -3,6 +3,5 @@ Hello :)
 Here you will find the exercises from
 Stephanie,
 Taimour, 
-Daniel,
-Maxim,
+Daniel and Maxim,
 Have a nice day :)
