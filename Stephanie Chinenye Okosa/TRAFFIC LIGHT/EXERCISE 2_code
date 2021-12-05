@@ -18,8 +18,10 @@ void loop()
 int change = digitalRead(10);
   if(change == HIGH)
   {
+    delay(3200);
+    digitalWrite(4, HIGH);
     digitalWrite(11, HIGH);
-    delay(5000);
+    delay(8000);
     digitalWrite(11,LOW);
     digitalWrite(12, HIGH);
   }
