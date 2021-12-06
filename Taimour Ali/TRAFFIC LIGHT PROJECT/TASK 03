@@ -1,0 +1,96 @@
+#define PedRed 3 
+#define PedGreen 4
+#define Red 2
+#define Yellow 1
+#define Green 0
+#define Request 5
+#define time 5000
+
+int path = 1;
+
+enum Color{redC, yellowC, greenC};
+Color current = redC;
+
+void setup()
+{
+  pinMode(PedRed, OUTPUT);
+  pinMode(PedGreen, OUTPUT);
+  pinMode(Red, OUTPUT);
+  pinMode(Yellow, OUTPUT);
+  pinMode(Green, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(Request), pedestrian, FALLING);
+}
+
+void RedLight() //TRAFFIC LIGHT TO CODE
+{
+    digitalWrite(Red, HIGH);
+    delay(time);
+    digitalWrite(Red, LOW);
+    current = yellowC;
+}
+  
+void YellowLight()
+{	
+    digitalWrite(Yellow, HIGH);
+    delay(time/2);
+    digitalWrite(Yellow, LOW);
+}
+  
+void GreenLight()
+{
+  	digitalWrite(Green, HIGH);
+    delay(time);
+    digitalWrite(Green, LOW);
+    current = yellowC;
+}
+
+void PedestrianRed(){ //PEDESTRIAN LIGHT TO CODE 
+  
+  digitalWrite(PedGreen, LOW);
+  digitalWrite(PedRed, HIGH);
+}
+
+void PedestrianGreen(){
+  
+  digitalWrite(PedGreen, HIGH);
+  digitalWrite(PedRed, LOW);
+
+}
+
+void pedestrian()
+{
+  path=0;
+}
+
+void loop()
+{
+  switch(current)
+  {
+    case redC:
+    	PedestrianGreen();
+      	RedLight();
+      
+    break;
+      
+    case yellowC:
+    	PedestrianRed();
+    	YellowLight();
+    	
+      	if(path == 1)
+        {
+          	path = 0;
+      		current = greenC;
+        }
+      	else if(path == 0)
+        {	
+            path = 1;
+      		current = redC;
+        }
+    break;
+      
+    case greenC:
+        GreenLight();
+    	PedestrianRed();
+    break;
+  }
+} 
