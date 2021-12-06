@@ -1,0 +1,75 @@
+// C++ code
+//
+enum Status{red, yellow, green};
+Status status;
+int t20 = 2000;
+int change;
+void setup()
+{
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(4, OUTPUT);
+}
+
+void loop()
+{
+  volatile bool light = true;
+  if(light)
+  {
+    switch(status)
+    {
+      case red:
+        digitalWrite(13, HIGH);
+        delay(t20);
+        digitalWrite(4, HIGH);
+        delay(t20);
+        digitalWrite(12, LOW);
+        digitalWrite(11, LOW);
+        digitalWrite(5,LOW);
+        digitalWrite(6, LOW);
+        digitalWrite(13, LOW);
+        digitalWrite(4, LOW);
+        status = yellow;
+      change = 1;
+        break;
+      case yellow:
+        digitalWrite(12, HIGH);
+        delay(t20/2);
+        digitalWrite(5, HIGH);
+        delay(t20/2);
+      	digitalWrite(12,LOW);
+      	digitalWrite(5,LOW);
+        digitalWrite(13, LOW);
+        digitalWrite(11, LOW);
+        digitalWrite(4,LOW);
+      	digitalWrite(6,LOW);
+      if(change == 0)
+      {
+        status = red;
+      }
+      if(change == 1)
+      {
+        status = green;
+      }
+        break;
+      case green:
+      	digitalWrite(6, HIGH);
+        delay(t20);
+        digitalWrite(11, HIGH);
+        delay(t20);
+      	digitalWrite(11,LOW);
+      	digitalWrite(6,LOW);
+        digitalWrite(13, LOW);
+        digitalWrite(11, LOW);
+        digitalWrite(4,LOW);
+      	digitalWrite(5,LOW);
+        status = yellow;
+      	change = 0;
+        break;
+    }
+  }
+  
+}
