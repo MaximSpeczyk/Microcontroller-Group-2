@@ -20,6 +20,7 @@ int change = digitalRead(10);
   {
     delay(3200);
     digitalWrite(4, HIGH);
+    digitalWrite(12,LOW);
     digitalWrite(11, HIGH);
     delay(8000);
     digitalWrite(11,LOW);
