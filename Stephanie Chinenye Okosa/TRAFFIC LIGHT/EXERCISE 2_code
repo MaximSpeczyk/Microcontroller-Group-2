@@ -22,7 +22,7 @@ int change = digitalRead(10);
     digitalWrite(4, HIGH);
     digitalWrite(12,LOW);
     digitalWrite(11, HIGH);
-    delay(8000);
+    delay(10000);
     digitalWrite(11,LOW);
     digitalWrite(12, HIGH);
   }
@@ -33,7 +33,7 @@ int change = digitalRead(10);
       case green:
       	digitalWrite(12, HIGH);
       	digitalWrite(2, HIGH);
-      	delay(3000);
+      	delay(10000);
         digitalWrite(2, LOW);
       	status = yellow;
       	set = 1;
@@ -41,7 +41,7 @@ int change = digitalRead(10);
       case yellow:
       	digitalWrite(12, HIGH);
       	digitalWrite(3, HIGH);
-        delay(1000);
+        delay(3000);
         digitalWrite(3, LOW);
       	if(set == 1)
         {
@@ -55,7 +55,7 @@ int change = digitalRead(10);
       case red:
       	digitalWrite(12, HIGH);
         digitalWrite(4, HIGH);
-        delay(3000);
+        delay(10000);
       	digitalWrite(4, LOW);
         status = yellow;
         set = 0;
