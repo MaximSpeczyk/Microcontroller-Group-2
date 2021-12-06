@@ -1,96 +1,75 @@
-#define PedRed 3 
-#define PedGreen 4
-#define Red 2
-#define Yellow 1
-#define Green 0
-#define Request 5
-#define time 5000
-
-int path = 1;
-
-enum Color{redC, yellowC, greenC};
-Color current = redC;
-
+// C++ code
+//
+enum Status{green, yellow, red, pgreen, pred};
+Status status = green;
+int set;
 void setup()
 {
-  pinMode(PedRed, OUTPUT);
-  pinMode(PedGreen, OUTPUT);
-  pinMode(Red, OUTPUT);
-  pinMode(Yellow, OUTPUT);
-  pinMode(Green, OUTPUT);
-  attachInterrupt(digitalPinToInterrupt(Request), pedestrian, FALLING);
-}
-
-void RedLight() //TRAFFIC LIGHT TO CODE
-{
-    digitalWrite(Red, HIGH);
-    delay(time);
-    digitalWrite(Red, LOW);
-    current = yellowC;
-}
-  
-void YellowLight()
-{	
-    digitalWrite(Yellow, HIGH);
-    delay(time/2);
-    digitalWrite(Yellow, LOW);
-}
-  
-void GreenLight()
-{
-  	digitalWrite(Green, HIGH);
-    delay(time);
-    digitalWrite(Green, LOW);
-    current = yellowC;
-}
-
-void PedestrianRed(){ //PEDESTRIAN LIGHT TO CODE 
-  
-  digitalWrite(PedGreen, LOW);
-  digitalWrite(PedRed, HIGH);
-}
-
-void PedestrianGreen(){
-  
-  digitalWrite(PedGreen, HIGH);
-  digitalWrite(PedRed, LOW);
-
-}
-
-void pedestrian()
-{
-  path=0;
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, INPUT);
+  pinMode(4, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(2, OUTPUT);
 }
 
 void loop()
 {
-  switch(current)
+int change = digitalRead(10);
+  if(change == HIGH)
   {
-    case redC:
-    	PedestrianGreen();
-      	RedLight();
-      
-    break;
-      
-    case yellowC:
-    	PedestrianRed();
-    	YellowLight();
-    	
-      	if(path == 1)
-        {
-          	path = 0;
-      		current = greenC;
-        }
-      	else if(path == 0)
-        {	
-            path = 1;
-      		current = redC;
-        }
-    break;
-      
-    case greenC:
-        GreenLight();
-    	PedestrianRed();
-    break;
+    delay(3200);
+    digitalWrite(4, HIGH);
+    digitalWrite(11, HIGH);
+    delay(8000);
+    digitalWrite(11,LOW);
+    digitalWrite(12, HIGH);
   }
-} 
+  else if(change == LOW)
+  {
+    switch(status)
+    {
+      case green:
+      	digitalWrite(12, HIGH);
+      	digitalWrite(2, HIGH);
+      	delay(3000);
+        digitalWrite(2, LOW);
+      	status = yellow;
+      	set = 1;
+        break;
+      case yellow:
+      	digitalWrite(12, HIGH);
+      	digitalWrite(3, HIGH);
+        delay(1000);
+        digitalWrite(3, LOW);
+      	if(set == 1)
+        {
+          status = red;
+      	} 
+      	if(set == 0)
+        {
+          status = green;
+      	} 
+        break;
+      case red:
+      	digitalWrite(12, HIGH);
+        digitalWrite(4, HIGH);
+        delay(3000);
+      	digitalWrite(4, LOW);
+        status = yellow;
+        set = 0;
+       break;
+    }
+  }
+  /*else if(change == HIGH)
+    switch(status)
+  {
+    case pgreen:
+        digitalWrite(11, HIGH);
+        delay(5000);
+        digitalWrite(11, LOW);
+        digitalWrite(12, HIGH);
+        status = green;
+  }*/
+  else{}
+}
