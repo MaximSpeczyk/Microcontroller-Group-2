@@ -1,0 +1,133 @@
+#include <SoftwareSerial.h>
+
+#include <Wire.h>
+
+// C++ code
+volatile boolean pushButton;
+int redState;
+enum State {red, yellow, green, pedestrianGreen,pedestrianYellow, pedestrianRed};
+State _currentState = green;
+State _targetState = pedestrianGreen;
+int time = 5000;
+int set;
+
+void setup()
+{
+  Wire.begin(1);
+  Wire.onReceive(receiveEvent);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(2, INPUT);
+  attachInterrupt(digitalPinToInterrupt(2), buttonPressed, RISING);
+}
+
+void loop()
+{
+
+	/*do
+    {
+      _currentState = red;
+      pedestrian();
+    }while(redState == 1);
+	do
+    {
+      trafficLight();
+    }while(redState == 0);*/
+  while(redState == 1)
+  {
+    if(redState == 1)
+    {
+      delay(15);// avoid software debounce
+      pedestrian();
+    }
+    continue;
+  }
+    trafficLight();
+}
+
+void trafficLight()
+{
+  digitalWrite(4, HIGH);
+  switch(_currentState)
+  {
+    case green:
+ 		digitalWrite(11, HIGH);
+    	delay(time);
+     	digitalWrite(11, LOW);
+    	_currentState = yellow;
+    	set = 0;
+    	break;
+	case yellow:
+ 		digitalWrite(10, HIGH);
+    	delay(time/2);
+     	digitalWrite(10, LOW);
+    	if(set == 0)
+    		_currentState = red;
+    	if(set == 1)
+          _currentState = green;
+    	break;
+    case red:
+ 		digitalWrite(9, HIGH);
+    	delay(time);
+     	digitalWrite(9, LOW);
+    	/*if(redState == 0)
+        
+        _currentState = yellow;
+        set = 1;
+        
+    	if(redState == 1)
+        {
+          _currentState = _targetState;
+          _targetState = pedestrianGreen;
+        }*/
+    	break;
+  }
+}
+
+void pedestrian()
+{
+  digitalWrite(4, LOW);
+  switch(_targetState)
+  {
+    if(redState == 1)
+      case pedestrianGreen:
+        digitalWrite(9, HIGH);
+        digitalWrite(5, HIGH);
+        delay(time*2);
+        digitalWrite(5, LOW);
+        _targetState = pedestrianYellow;
+        break;
+      case pedestrianYellow:
+        digitalWrite(9, HIGH);
+        digitalWrite(9, LOW);
+        digitalWrite(10, HIGH);
+        delay(time/2);
+        digitalWrite(10, LOW);
+        _targetState = pedestrianRed;
+        break;
+      case pedestrianRed:
+        digitalWrite(9, LOW);
+        digitalWrite(4, HIGH);
+        delay(time*2);
+        digitalWrite(4, LOW);
+        break;
+  }
+}
+
+void buttonPressed()
+ {
+    if(digitalRead(2) == LOW)
+    {
+      redState = 0;
+    }
+    if(digitalRead(2) == HIGH)
+    {
+      redState = 1;
+    }
+  } 
+
+
+ 
