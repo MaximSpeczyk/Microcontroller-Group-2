@@ -1,0 +1,131 @@
+#include <SoftwareSerial.h>
+
+#include <Wire.h>
+
+// C++ code
+volatile boolean pushButton;
+int redState;
+enum State {red, yellow, green, pedestrianGreen, pedestrianRed};
+State _currentState = green;
+State _targetState = pedestrianGreen;
+int time = 5000;
+int set;
+int event;
+void setup()
+{
+  Wire.begin(1);
+  Wire.onReceive(receiveEvent);
+  Serial.begin(9600);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(2, INPUT);
+  attachInterrupt(digitalPinToInterrupt(5), buttonPressed, RISING);
+}
+
+void loop()
+{
+   if(redState == 0)
+    {
+      delay(15);// avoid software debounce
+      pedestrian();
+  	}
+  	else
+    {
+      trafficLight();
+    }
+}
+
+void trafficLight()
+{
+  digitalWrite(3, HIGH);
+  switch(_currentState)
+  {
+    case green:
+ 		digitalWrite(10, HIGH);
+    	delay(time);
+     	digitalWrite(10, LOW);
+    	_currentState = yellow;
+    	redState = 1;
+    	set = 0;
+    	break;
+	case yellow:
+ 		digitalWrite(11, HIGH);
+    	delay(time/2);
+     	digitalWrite(11, LOW);
+    	redState = 1;
+    	if(set == 0)
+    		_currentState = red;
+    	if(set == 1)
+          _currentState = green;
+    	break;
+    case red:
+ 		digitalWrite(12, HIGH);
+    	delay(time);
+     	digitalWrite(12, LOW);
+    	if(redState == 1)
+        _currentState = yellow;
+        set = 1;
+        if(redState == 0)
+        {
+          _currentState = _targetState;
+          _targetState = pedestrianGreen;
+        }
+    	break;
+  }
+}
+
+void pedestrian()
+{
+  digitalWrite(3, LOW);
+  switch(_targetState)
+  {
+      case pedestrianGreen:
+        digitalWrite(12, HIGH);
+    	delay(time/5);
+        digitalWrite(2, HIGH);
+        delay(time*2);
+        digitalWrite(2, LOW);
+    	redState = 0;
+        _targetState = yellow;
+        break;
+      case yellow:
+        digitalWrite(12, HIGH);
+        digitalWrite(12, LOW);
+        digitalWrite(11, HIGH);
+        delay(time/2);
+        digitalWrite(11, LOW);
+        _targetState = pedestrianRed;
+        break;
+      case pedestrianRed:
+        digitalWrite(12, LOW);
+        digitalWrite(3, HIGH);
+        delay(time*2);
+        digitalWrite(3, LOW);
+    	redState = 1;
+    	_targetState = _currentState;
+    	trafficLight();
+        break;
+  }
+}
+
+void buttonPressed()
+ {
+    if(digitalRead(5) == LOW)
+    {
+      redState = 0;
+    }
+    if(digitalRead(5) == HIGH)
+    {
+      redState = 1;
+    }
+  } 
+
+
+ void receiveEvent(int event)
+ {
+   redState = Wire.read();
+ 
+ }
