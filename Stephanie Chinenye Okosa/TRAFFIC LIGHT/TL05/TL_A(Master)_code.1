@@ -42,7 +42,7 @@ void trafficLight()
   switch(_currentState)
   {
     case green:
- 		digitalWrite(11, HIGH);
+ 	digitalWrite(11, HIGH);
     	delay(time);
      	digitalWrite(11, LOW);
     	_currentState = yellow;
@@ -50,7 +50,7 @@ void trafficLight()
     	set = 0;
     	break;
 	case yellow:
- 		digitalWrite(10, HIGH);
+ 	digitalWrite(10, HIGH);
     	delay(time/2);
      	digitalWrite(10, LOW);
     	redState = 0;
@@ -60,7 +60,7 @@ void trafficLight()
           _currentState = green;
     	break;
     case red:
- 		digitalWrite(9, HIGH);
+ 	digitalWrite(9, HIGH);
     	delay(time);
      	digitalWrite(9, LOW);
     	if(redState == 0)
